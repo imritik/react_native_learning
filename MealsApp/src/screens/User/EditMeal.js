@@ -198,7 +198,7 @@ const EditMealsScreen = ({route, navigation}) => {
           </TouchableOpacity>
           <View>
             <Button
-              title={Strings.SAVE_MEAL_BUTTON}
+              title={Strings.SAVE}
               onPress={handleSubmit}
               disabled={!isValid}
             />

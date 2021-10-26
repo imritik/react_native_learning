@@ -8,12 +8,14 @@ import ReduxThunk from 'redux-thunk';
 import categoryReducer from './src/store/reducers/categories';
 import {StatusBar, LogBox} from 'react-native';
 import Colors from './src/helpers/Colors';
+import authReducer from './src/store/reducers/auth';
 
 enableScreens();
 
 const rootReducer = combineReducers({
   meals: mealsReducer,
   categories: categoryReducer,
+  auth: authReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 LogBox.ignoreAllLogs();

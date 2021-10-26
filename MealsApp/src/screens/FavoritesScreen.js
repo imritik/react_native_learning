@@ -40,16 +40,16 @@ const FavoritesScreen = ({navigation}) => {
     return <EmptyList message={error} />;
   }
 
-  if (isLoading) {
-    <ActivityIndicatorView />;
-  }
-
   if (favMeals.length === 0 || !favMeals) {
     return <EmptyList message={Strings.EMPTY_FAV_LIST} />;
   }
   return (
     <SafeAreaView style={AppStyle.screenContainer}>
-      <MealList MealList={favMeals} navigation={navigation} />
+      {isLoading ? (
+        <ActivityIndicatorView />
+      ) : (
+        <MealList MealList={favMeals} navigation={navigation} />
+      )}
     </SafeAreaView>
   );
 };

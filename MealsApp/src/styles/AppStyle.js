@@ -14,9 +14,13 @@ export default StyleSheet.create({
   screenContainer: {
     flex: 1,
   },
-  errorText:{
-    color:Colors.errorTextColor,
-    fontSize:12,
-    textAlign:'center'
-  }
+  errorText: {
+    color: Colors.errorTextColor,
+    fontSize: 12,
+    textAlign: 'center',
+  },
+  splashScreen: {
+    flex: 1,
+    backgroundColor: Colors.accentColor,
+  },
 });

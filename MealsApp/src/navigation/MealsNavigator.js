@@ -1,5 +1,10 @@
-import React, {useState} from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import React, {useEffect, useRef} from 'react';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import CategoriesScreen from '../screens/CategoriesScreen';
@@ -10,10 +15,18 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Strings from '../helpers/Strings';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import FiltersScreen from '../screens/FiltersScreen';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import EditMealsScreen from '../screens/User/EditMeal';
 import UserMealsScreen from '../screens/User/UserMeals';
-import {Dimensions} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {NavigationActions} from 'react-navigation';
+import AuthScreen from '../screens/User/AuthScreen';
+import {Alert, View, SafeAreaView, Button} from 'react-native';
+import SplashScreen from '../screens/SplashScreen';
+import * as authActions from '../store/actions/auth';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -74,6 +87,16 @@ const UserMealsNavigator = () => {
   );
 };
 
+const AuthStack = createStackNavigator();
+
+const AuthNavigator = () => {
+  return (
+    <AuthStack.Navigator screenOptions={defaultStackNavOptions}>
+      <AuthStack.Screen name="Auth" component={AuthScreen} />
+    </AuthStack.Navigator>
+  );
+};
+
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -115,8 +138,21 @@ const BottomTabNavigator = () => {
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
+  const dispatch = useDispatch();
   return (
     <Drawer.Navigator
+      drawerContent={props => {
+        return (
+          <DrawerContentScrollView {...props}>
+            <DrawerItemList {...props} />
+            <DrawerItem
+              icon={() => <Icon name="power-off" />}
+              label="Logout"
+              onPress={() => dispatch(authActions.logout())}
+            />
+          </DrawerContentScrollView>
+        );
+      }}
       screenOptions={{
         drawerActiveTintColor: Colors.accentColor,
         headerShown: false,
@@ -147,9 +183,15 @@ function MyDrawer() {
 }
 
 const MainNavigator = () => {
+  let isAutheticated = useSelector(state => !!state.auth.token);
+
+  // useEffect(() => {
+  //   isAutheticated = isAutheticated;
+  // }, [isAutheticated]);
+
   return (
     <NavigationContainer>
-      <MyDrawer />
+      {isAutheticated ? <MyDrawer /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };

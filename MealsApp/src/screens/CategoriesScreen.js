@@ -7,6 +7,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import * as categoryActions from '../store/actions/categories';
 import {IconButton} from 'react-native-paper';
 import ActivityIndicatorView from '../components/ActivityIndicatorView';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Alert} from 'react-native';
 const CategoriesScreen = ({navigation}) => {
   const renderGridTile = itemData => {
     return (
@@ -43,6 +45,8 @@ const CategoriesScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const loadCategories = useCallback(async () => {
+    // const userData = await AsyncStorage.getItem('userData');
+    // Alert.alert(JSON.stringify(userData));
     setError(null);
     setIsRefreshing(true);
     try {
@@ -69,20 +73,23 @@ const CategoriesScreen = ({navigation}) => {
     return <EmptyList message={error} />;
   }
 
-  if (isLoading) {
-    <ActivityIndicatorView />;
-  }
   return (
     <SafeAreaView>
-      <FlatList
-        onRefresh={loadCategories}
-        refreshing={isRefreshing}
-        keyExtractor={(item, index) => item.id}
-        data={categories}
-        renderItem={renderGridTile}
-        numColumns={2}
-        ListEmptyComponent={<EmptyList message={Strings.EMPTY_CATEGORY_LIST} />}
-      />
+      {isLoading ? (
+        <ActivityIndicatorView />
+      ) : (
+        <FlatList
+          onRefresh={loadCategories}
+          refreshing={isRefreshing}
+          keyExtractor={(item, index) => item.id}
+          data={categories}
+          renderItem={renderGridTile}
+          numColumns={2}
+          ListEmptyComponent={
+            <EmptyList message={Strings.EMPTY_CATEGORY_LIST} />
+          }
+        />
+      )}
     </SafeAreaView>
   );
 };
