@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import MealList from '../components/MealList';
-import Strings from '../helpers/Strings';
+import MealList from '../../components/MealList';
+import Strings from '../../helpers/Strings';
 import {useDispatch, useSelector} from 'react-redux';
-import EmptyList from '../components/EmptyList';
-import * as mealsAction from '../store/actions/meals';
-import ActivityIndicatorView from '../components/ActivityIndicatorView';
+import EmptyList from '../../components/EmptyList';
+import * as mealsAction from '../../store/actions/meals';
+import ActivityIndicatorView from '../../components/ActivityIndicatorView';
 import {SafeAreaView} from 'react-native';
-import AppStyle from '../styles/AppStyle';
+import {useAppStyle} from '../../styles/AppStyle';
 const FavoritesScreen = ({navigation}) => {
   const favMeals = useSelector(state => state.meals.favoriteMeals);
 
@@ -44,7 +44,7 @@ const FavoritesScreen = ({navigation}) => {
     return <EmptyList message={Strings.EMPTY_FAV_LIST} />;
   }
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       {isLoading ? (
         <ActivityIndicatorView />
       ) : (

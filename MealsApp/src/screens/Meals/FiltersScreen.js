@@ -1,14 +1,15 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {Switch, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import Strings from '../helpers/Strings';
-import {setFilters} from '../store/actions/meals';
-import styles from '../styles/FilterScreenStyle';
+import Strings from '../../helpers/Strings';
+import {setFilters} from '../../store/actions/meals';
+import styles from '../../styles/FilterScreenStyle';
 import {IconButton} from 'react-native-paper';
+import {useAppStyle} from '../../styles/AppStyle';
 const FilterSwitchButton = props => {
   return (
     <View style={styles.filterButtonContainer}>
-      <Text>{props.label}</Text>
+      <Text style={useAppStyle().styles.textInputColor}>{props.label}</Text>
       <Switch value={props.state} onValueChange={props.onChange} />
     </View>
   );
@@ -54,7 +55,10 @@ const FiltersScreen = ({route, navigation}) => {
 
   return (
     <View style={styles.filterScreen}>
-      <Text style={styles.title}>{Strings.AVAILABLE_FILTERS}</Text>
+      <Text
+        style={{...styles.title, color: useAppStyle().theme.primaryTextColor}}>
+        {Strings.AVAILABLE_FILTERS}
+      </Text>
       <FilterSwitchButton
         label={Strings.GLUTEN_FREE}
         state={isGlutenFree}

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import styles from '../../styles/EditMealsStyle';
-import AppStyle from '../../styles/AppStyle';
+import {useAppStyle} from '../../styles/AppStyle';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useFormik} from 'formik';
 import editMealFormValidation from '../../helpers/Validations/editMealFormValidation';
@@ -122,7 +122,7 @@ const EditMealsScreen = ({route, navigation}) => {
       setError(err.message);
     }
     setIsLoading(false);
-    Alert.alert(Strings.MEAL_SUCCESSFULLY_ADDED, '',[
+    Alert.alert(Strings.MEAL_SUCCESSFULLY_ADDED, '', [
       {
         text: Strings.OK,
         onPress: () => {
@@ -140,7 +140,7 @@ const EditMealsScreen = ({route, navigation}) => {
     });
   });
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         keyboardShouldPersistTaps={'handled'}
@@ -158,6 +158,7 @@ const EditMealsScreen = ({route, navigation}) => {
               }),
             }}
             placeholder={Strings.ENTER_MEAL_TITLE}
+            placeholderTextColor={useAppStyle().theme.placeholderTextColor}
             keyboardType="default"
             autoCapitalize="sentences"
             returnKeyType="next"
@@ -166,11 +167,12 @@ const EditMealsScreen = ({route, navigation}) => {
             value={values.title}
           />
           {errors.title && touched.title && (
-            <Text style={AppStyle.errorText}>{errors.title}</Text>
+            <Text style={useAppStyle().styles.errorText}>{errors.title}</Text>
           )}
           <TextInput
             name="steps"
             placeholder={Strings.ENTER_MEAL_PRICE}
+            placeholderTextColor={useAppStyle().theme.placeholderTextColor}
             style={{
               ...styles.formTextInput,
               ...Platform.select({
@@ -190,11 +192,11 @@ const EditMealsScreen = ({route, navigation}) => {
             value={values.steps}
           />
           {errors.steps && touched.steps && (
-            <Text style={AppStyle.errorText}>{errors.steps}</Text>
+            <Text style={useAppStyle().styles.errorText}>{errors.steps}</Text>
           )}
 
           <TouchableOpacity style={styles.inputImage} onPress={pickImage}>
-            <Text>{Strings.CHOOSE_MEAL_IMAGE}</Text>
+            <Text style={useAppStyle().styles.mealItemTextColor}>{Strings.CHOOSE_MEAL_IMAGE}</Text>
           </TouchableOpacity>
           <View>
             <Button

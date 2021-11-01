@@ -11,8 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import {Button} from 'react-native-elements';
-import styles from '../../styles/AuthScreenStyle';
-import AppStyle from '../../styles/AppStyle';
+import {useStyle} from '../../styles/AuthScreenStyle';
+import {useAppStyle} from '../../styles/AppStyle';
 import {useFormik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import authFormValidationSchema from '../../helpers/Validations/authFormValidations';
@@ -20,6 +20,9 @@ import {TouchableOpacity} from 'react-native';
 import * as authActions from '../../store/actions/auth';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IconButton} from 'react-native-paper';
+import * as utils from '../../helpers/Utils/utils';
+import {useTheme} from 'react-navigation';
 
 const AuthScreen = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +34,7 @@ const AuthScreen = ({route, navigation}) => {
   );
 
   const dispatch = useDispatch();
+  const {colors} = useTheme();
 
   useEffect(() => {
     if (error) {
@@ -50,6 +54,10 @@ const AuthScreen = ({route, navigation}) => {
         return;
       }
       const userCredentials = JSON.parse(userData);
+      if (isSignup) {
+        setCurrentUser(null);
+        return;
+      }
       setCurrentUser(userCredentials);
       const {token, userId, expiryDate} = userCredentials;
       const expirationDate = new Date(expiryDate);
@@ -61,7 +69,7 @@ const AuthScreen = ({route, navigation}) => {
       // dispatch(authActions.authenticate(userId, token, expirationTime));
     };
     tryLogin();
-  }, [dispatch]);
+  }, [dispatch, isSignup]);
 
   useEffect(() => {
     const updateLayout = () => {
@@ -110,7 +118,7 @@ const AuthScreen = ({route, navigation}) => {
     }
     setError(null);
     try {
-      await dispatch(action);
+      dispatch(action);
     } catch (err) {
       setError(err.message);
       setIsLoading(false);
@@ -123,20 +131,36 @@ const AuthScreen = ({route, navigation}) => {
     });
   });
 
+  const authenticateButtonHandler = async () => {
+    utils
+      .touchIdAuth()
+      .then(res => {
+        Alert.alert(JSON.stringify(res));
+        //fetch stored credentials
+      })
+      .catch(err => {
+        console.log(err);
+        Alert.alert(JSON.stringify(err));
+      });
+  };
+
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         keyboardShouldPersistTaps={'handled'}
         enableResetScrollToCoords={false}
-        style={{flex: 1}}
         keyboardDismissMode="on-drag">
-        <View style={{...styles.authFormContainer, marginTop: formMarginTop}}>
-          <View style={styles.forms}>
+        <View
+          style={{
+            ...useStyle().authFormContainer,
+            marginTop: formMarginTop,
+          }}>
+          <View style={useStyle().forms}>
             <TextInput
               name="email"
               style={{
-                ...styles.formTextInput,
+                ...useStyle().formTextInput,
                 ...Platform.select({
                   ios: {
                     height: '20%',
@@ -144,6 +168,7 @@ const AuthScreen = ({route, navigation}) => {
                 }),
               }}
               placeholder={Strings.ENTER_EMAIL}
+              placeholderTextColor={useAppStyle().theme.primaryTextColor}
               keyboardType="default"
               autoCapitalize="sentences"
               returnKeyType="next"
@@ -152,14 +177,15 @@ const AuthScreen = ({route, navigation}) => {
               value={values.email}
             />
             {errors.email && touched.email && (
-              <Text style={AppStyle.errorText}>{errors.email}</Text>
+              <Text style={useAppStyle().styles.errorText}>{errors.email}</Text>
             )}
             <TextInput
               name="password"
               secureTextEntry={true}
               placeholder={Strings.ENTER_PASSWORD}
+              placeholderTextColor={useAppStyle().theme.primaryTextColor}
               style={{
-                ...styles.formTextInput,
+                ...useStyle().formTextInput,
                 ...Platform.select({
                   ios: {
                     height: '20%',
@@ -172,7 +198,9 @@ const AuthScreen = ({route, navigation}) => {
               value={values.password}
             />
             {errors.password && touched.password && (
-              <Text style={AppStyle.errorText}>{errors.password}</Text>
+              <Text style={useAppStyle().styles.errorText}>
+                {errors.password}
+              </Text>
             )}
             <View>
               {isLoading ? (
@@ -187,16 +215,24 @@ const AuthScreen = ({route, navigation}) => {
             </View>
             <View>
               <TouchableOpacity
-                style={styles.switchButtonView}
+                style={useStyle().switchButtonView}
                 onPress={() => {
                   setIsSignup(prevState => !prevState);
+                  // setCurrentUser(null);
                 }}>
-                <Text>
+                <Text style={{color: useAppStyle().theme.inputBackground}}>
                   Switch to {isSignup ? Strings.LOGIN : Strings.SIGNUP}
                 </Text>
               </TouchableOpacity>
             </View>
           </View>
+          <IconButton
+            icon="fingerprint"
+            size={30}
+            color={useAppStyle().theme.placeholderTextColor}
+            onPress={authenticateButtonHandler}
+            style={useStyle().authenticateBtn}
+          />
         </View>
       </KeyboardAwareScrollView>
     </SafeAreaView>

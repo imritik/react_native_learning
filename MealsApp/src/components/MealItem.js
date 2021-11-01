@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 import {Button} from 'react-native-elements/dist/buttons/Button';
-import Colors from '../helpers/Colors';
 import styles from '../styles/MealItemStyle';
+import {useAppStyle} from '../styles/AppStyle';
 const MealItem = props => {
   return (
     <View style={styles.mealItem}>
@@ -25,9 +25,15 @@ const MealItem = props => {
           </View>
           {!props.isUserMeals && (
             <View style={{...styles.mealRow, ...styles.mealDetail}}>
-              <Text>{props.duration}m</Text>
-              <Text>{props.complexity.toUpperCase()}</Text>
-              <Text>{props.affordability.toUpperCase()}</Text>
+              <Text style={useAppStyle().styles.mealItemTextColor}>
+                {props.duration}m
+              </Text>
+              <Text style={useAppStyle().styles.mealItemTextColor}>
+                {props.complexity.toUpperCase()}
+              </Text>
+              <Text style={useAppStyle().styles.mealItemTextColor}>
+                {props.affordability.toUpperCase()}
+              </Text>
             </View>
           )}
           {props.isUserMeals && (
@@ -35,7 +41,7 @@ const MealItem = props => {
               style={{
                 ...styles.mealRow,
                 ...styles.mealDetail,
-                backgroundColor: Colors.accentColor,
+                backgroundColor: useAppStyle().theme.accentColor,
               }}>
               <Button title="Edit" onPress={props.onEditClick} />
               <Button title="Delete" onPress={props.onDelete} />

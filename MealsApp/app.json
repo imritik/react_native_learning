@@ -1,4 +1,5 @@
 {
   "name": "MealsApp",
-  "displayName": "MealsApp"
+  "displayName": "MealsApp",
+  "ios": {"userInterfaceStyle": "automatic"}
 }

@@ -1,10 +1,10 @@
 import React from 'react';
-import MealList from '../components/MealList';
-import EmptyList from '../components/EmptyList';
-import Strings from '../helpers/Strings';
+import MealList from '../../components/MealList';
+import EmptyList from '../../components/EmptyList';
+import Strings from '../../helpers/Strings';
 import {useSelector} from 'react-redux';
 import {SafeAreaView} from 'react-native';
-import AppStyle from '../styles/AppStyle';
+import {useAppStyle} from '../../styles/AppStyle';
 
 const CategoryMealsSceeen = ({route, navigation}) => {
   const {categoryId} = route.params;
@@ -28,7 +28,7 @@ const CategoryMealsSceeen = ({route, navigation}) => {
     return <EmptyList message={Strings.EMPTY_MEALS_LIST} />;
   }
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       <MealList MealList={mealsToBeDisplayed} navigation={navigation} />
     </SafeAreaView>
   );

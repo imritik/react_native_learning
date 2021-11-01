@@ -1,11 +1,13 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import styles from '../styles/AppStyle';
+import {useAppStyle} from '../styles/AppStyle';
 
 const EmptyList = props => {
   return (
-    <View style={styles.emptyListContainer}>
-      <Text>{props.message}</Text>
+    <View style={useAppStyle().styles.emptyListContainer}>
+      <Text style={useAppStyle().styles.textInputColor}>
+        {props.message}
+      </Text>
     </View>
   );
 };

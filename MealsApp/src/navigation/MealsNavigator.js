@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useContext} from 'react';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -7,33 +7,31 @@ import {
 } from '@react-navigation/drawer';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import CategoriesScreen from '../screens/CategoriesScreen';
-import CategoryMealsScreen from '../screens/CategoryMealsScreen';
-import MealDetailsScreen from '../screens/MealDetailsScreen';
-import Colors from '../helpers/Colors';
+import CategoriesScreen from '../screens/Meals/CategoriesScreen';
+import CategoryMealsScreen from '../screens/Meals/CategoryMealsScreen';
+import MealDetailsScreen from '../screens/Meals/MealDetailsScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Strings from '../helpers/Strings';
-import FavoritesScreen from '../screens/FavoritesScreen';
-import FiltersScreen from '../screens/FiltersScreen';
+import FavoritesScreen from '../screens/Meals/FavoritesScreen';
+import FiltersScreen from '../screens/Meals/FiltersScreen';
 import {
   NavigationContainer,
-  useNavigationContainerRef,
+  DefaultTheme,
+  DarkTheme,
 } from '@react-navigation/native';
 import EditMealsScreen from '../screens/User/EditMeal';
 import UserMealsScreen from '../screens/User/UserMeals';
 import {useSelector, useDispatch} from 'react-redux';
-import {NavigationActions} from 'react-navigation';
 import AuthScreen from '../screens/User/AuthScreen';
-import {Alert, View, SafeAreaView, Button} from 'react-native';
-import SplashScreen from '../screens/SplashScreen';
 import * as authActions from '../store/actions/auth';
+import PlacesScreen from '../screens/Places/PlacesScreen';
+import AddPlaceScreen from '../screens/Places/AddPlaceSceen';
+import MapScreen from '../components/MapScreen';
+import {useColorScheme} from 'react-native-appearance';
+import {useAppStyle} from '../styles/AppStyle';
 
 const defaultStackNavOptions = {
-  headerStyle: {
-    backgroundColor: Colors.primaryColor,
-  },
   headerTitleAlign: 'center',
-  headerTintColor: Colors.appBarTitleColor,
 };
 
 const MealsStack = createStackNavigator();
@@ -41,7 +39,14 @@ const MealsStack = createStackNavigator();
 const MealsNavigator = () => {
   return (
     <MealsStack.Navigator
-      screenOptions={{...defaultStackNavOptions, headerShown: true}}
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}
       initialRouteName="Categories">
       <MealsStack.Screen name="Categories" component={CategoriesScreen} />
       <MealsStack.Screen name="CategoryMeals" component={CategoryMealsScreen} />
@@ -55,7 +60,13 @@ const FavStack = createStackNavigator();
 const FavNavigator = () => {
   return (
     <FavStack.Navigator
-      screenOptions={defaultStackNavOptions}
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}
       initialRouteName="Favorites">
       <FavStack.Screen name="Favorites" component={FavoritesScreen} />
       <FavStack.Screen name="MealDetail" component={MealDetailsScreen} />
@@ -67,7 +78,14 @@ const FiltersStack = createStackNavigator();
 
 const FiltersNavigator = () => {
   return (
-    <FiltersStack.Navigator screenOptions={defaultStackNavOptions}>
+    <FiltersStack.Navigator
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}>
       <FiltersStack.Screen
         name={Strings.FILTERS_SCREEN_TITLE}
         component={FiltersScreen}
@@ -80,7 +98,14 @@ const UserMealsStack = createStackNavigator();
 
 const UserMealsNavigator = () => {
   return (
-    <UserMealsStack.Navigator screenOptions={defaultStackNavOptions}>
+    <UserMealsStack.Navigator
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}>
       <UserMealsStack.Screen name="UserMeals" component={UserMealsScreen} />
       <UserMealsStack.Screen name="AddMeals" component={EditMealsScreen} />
     </UserMealsStack.Navigator>
@@ -91,9 +116,35 @@ const AuthStack = createStackNavigator();
 
 const AuthNavigator = () => {
   return (
-    <AuthStack.Navigator screenOptions={defaultStackNavOptions}>
+    <AuthStack.Navigator
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}>
       <AuthStack.Screen name="Auth" component={AuthScreen} />
     </AuthStack.Navigator>
+  );
+};
+
+const PlacesStack = createStackNavigator();
+
+const PlaceNavigator = () => {
+  return (
+    <PlacesStack.Navigator
+      screenOptions={{
+        ...defaultStackNavOptions,
+        headerStyle: {
+          backgroundColor: useAppStyle().theme.primaryColor,
+        },
+        headerTintColor: useAppStyle().theme.appBarTitleColor,
+      }}>
+      <PlacesStack.Screen name="Places" component={PlacesScreen} />
+      <PlacesStack.Screen name="AddPlace" component={AddPlaceScreen} />
+      <PlacesStack.Screen name="Map" component={MapScreen} />
+    </PlacesStack.Navigator>
   );
 };
 
@@ -105,10 +156,10 @@ const BottomTabNavigator = () => {
       screenOptions={{
         ...defaultStackNavOptions,
         tabBarStyle: {
-          backgroundColor: Colors.primaryColor,
+          backgroundColor: useAppStyle().theme.primaryColor,
         },
         tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'black',
+        tabBarInactiveTintColor: useAppStyle().theme.iconInActiveColor,
         headerShown: false,
       }}>
       <BottomTab.Screen
@@ -131,6 +182,16 @@ const BottomTabNavigator = () => {
           },
         }}
       />
+      <BottomTab.Screen
+        name={Strings.PLACES}
+        component={PlaceNavigator}
+        options={{
+          tabBarLabel: Strings.PLACES,
+          tabBarIcon: ({color}) => {
+            return <Icon name="map" size={18} color={color} />;
+          },
+        }}
+      />
     </BottomTab.Navigator>
   );
 };
@@ -146,7 +207,12 @@ function MyDrawer() {
           <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
             <DrawerItem
-              icon={() => <Icon name="power-off" />}
+              icon={() => (
+                <Icon
+                  name="power-off"
+                  color={useAppStyle().theme.primaryIconColor}
+                />
+              )}
               label="Logout"
               onPress={() => dispatch(authActions.logout())}
             />
@@ -154,7 +220,7 @@ function MyDrawer() {
         );
       }}
       screenOptions={{
-        drawerActiveTintColor: Colors.accentColor,
+        drawerActiveTintColor: useAppStyle().theme.accentColor,
         headerShown: false,
       }}>
       <Drawer.Screen
@@ -162,20 +228,32 @@ function MyDrawer() {
         component={BottomTabNavigator}
         options={{
           drawerLabel: Strings.MEALS,
-          drawerIcon: () => <Icon name="utensils" />,
+
+          drawerIcon: () => (
+            <Icon
+              name="utensils"
+              color={useAppStyle().theme.primaryIconColor}
+            />
+          ),
         }}
       />
       <Drawer.Screen
         name={Strings.FILTERS}
         component={FiltersNavigator}
-        options={{drawerIcon: () => <Icon name="filter" />}}
+        options={{
+          drawerIcon: () => (
+            <Icon name="filter" color={useAppStyle().theme.primaryIconColor} />
+          ),
+        }}
       />
       <Drawer.Screen
         name={Strings.UserMeals_ScreenTitle}
         component={UserMealsNavigator}
         options={{
           drawerLabel: Strings.UserMeals_ScreenTitle,
-          drawerIcon: () => <Icon name="edit" />,
+          drawerIcon: () => (
+            <Icon name="edit" color={useAppStyle().theme.primaryIconColor} />
+          ),
         }}
       />
     </Drawer.Navigator>
@@ -184,13 +262,9 @@ function MyDrawer() {
 
 const MainNavigator = () => {
   let isAutheticated = useSelector(state => !!state.auth.token);
-
-  // useEffect(() => {
-  //   isAutheticated = isAutheticated;
-  // }, [isAutheticated]);
-
+  const scheme = useColorScheme();
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={scheme == 'dark' ? DarkTheme : DefaultTheme}>
       {isAutheticated ? <MyDrawer /> : <AuthNavigator />}
     </NavigationContainer>
   );

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppStyle from '../styles/AppStyle';
+import {useAppStyle} from '../styles/AppStyle';
 import ActivityIndicatorView from '../components/ActivityIndicatorView';
 import * as authActions from '../store/actions/auth';
 import MealsNavigator from '../navigation/MealsNavigator';
@@ -42,7 +42,7 @@ const SplashScreen = ({navigation}) => {
   }, [dispatch]);
 
   return (
-    <SafeAreaView style={AppStyle.splashScreen}>
+    <SafeAreaView style={useAppStyle().styles.splashScreen}>
       <View>
         <Text
           style={{textAlign: 'center', marginVertical: '46%', fontSize: 30}}>

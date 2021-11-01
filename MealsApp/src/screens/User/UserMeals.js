@@ -7,7 +7,7 @@ import * as mealsAction from '../../store/actions/meals';
 import ActivityIndicatorView from '../../components/ActivityIndicatorView';
 import {IconButton} from 'react-native-paper';
 import {SafeAreaView} from 'react-native';
-import AppStyle from '../../styles/AppStyle';
+import {useAppStyle} from '../../styles/AppStyle';
 const UserMealsScreen = ({navigation}) => {
   const userMeals = useSelector(state => state.meals.userMeals);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,7 @@ const UserMealsScreen = ({navigation}) => {
     return <EmptyList message={Strings.EMPTY_USER_MEAL_LIST} />;
   }
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       <MealList
         isUserMeals={true}
         MealList={userMeals}

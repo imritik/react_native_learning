@@ -1,16 +1,18 @@
 import {Alert, Image, SafeAreaView, ScrollView, Text, View} from 'react-native';
-import Strings from '../helpers/Strings';
+import Strings from '../../helpers/Strings';
 import {useSelector, useDispatch} from 'react-redux';
 import React, {useCallback, useEffect} from 'react';
-import {toggleFavorite} from '../store/actions/meals';
-import styles from '../styles/MealDetailsStyle';
+import {toggleFavorite} from '../../store/actions/meals';
+import styles from '../../styles/MealDetailsStyle';
 import {IconButton} from 'react-native-paper';
-import * as mealsAction from '../store/actions/meals';
-import AppStyle from '../styles/AppStyle';
+import * as mealsAction from '../../store/actions/meals';
+import {useAppStyle} from '../../styles/AppStyle';
 const ListItem = props => {
   return (
     <View style={styles.listItem}>
-      <Text>{props.children}</Text>
+      <Text style={useAppStyle().styles.textInputColor}>
+        {props.children}
+      </Text>
     </View>
   );
 };
@@ -23,6 +25,8 @@ const MealDetailsScreen = ({route, navigation}) => {
     state.meals.favoriteMeals.some(meal => meal.id === mealId),
   );
   const currentFavMeals = useSelector(state => state.meals.favoriteMeals);
+
+  let textColor = useAppStyle().theme.primaryTextColor;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,19 +68,35 @@ const MealDetailsScreen = ({route, navigation}) => {
     return favArray;
   };
   return (
-    <SafeAreaView style={AppStyle.screenContainer}>
+    <SafeAreaView style={useAppStyle().styles.screenContainer}>
       <ScrollView>
         <Image source={{uri: selectedMeal.imageUrl}} style={styles.image} />
         <View style={styles.details}>
-          <Text>{selectedMeal.duration}</Text>
-          <Text>{selectedMeal.complexity.toUpperCase()}</Text>
-          <Text>{selectedMeal.affordability.toUpperCase()}</Text>
+          <Text style={{color: textColor}}>{selectedMeal.duration}</Text>
+          <Text style={{color: textColor}}>
+            {selectedMeal.complexity.toUpperCase()}
+          </Text>
+          <Text style={{color: textColor}}>
+            {selectedMeal.affordability.toUpperCase()}
+          </Text>
         </View>
-        <Text style={styles.title}>{Strings.INGREDIENTS}</Text>
+        <Text
+          style={{
+            ...styles.title,
+            color: textColor,
+          }}>
+          {Strings.INGREDIENTS}
+        </Text>
         {selectedMeal.ingredients.map(item => (
           <ListItem key={item}>{item}</ListItem>
         ))}
-        <Text style={styles.title}>{Strings.STEPS}</Text>
+        <Text
+          style={{
+            ...styles.title,
+            color: textColor,
+          }}>
+          {Strings.STEPS}
+        </Text>
         {selectedMeal.steps.map(step => (
           <ListItem key={step}>{step}</ListItem>
         ))}

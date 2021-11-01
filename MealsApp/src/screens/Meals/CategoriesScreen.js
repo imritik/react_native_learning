@@ -1,12 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {FlatList, SafeAreaView} from 'react-native';
-import CategoryGridTile from '../components/CategoryTile';
-import EmptyList from '../components/EmptyList';
-import Strings from '../helpers/Strings';
+import CategoryGridTile from '../../components/CategoryTile';
+import EmptyList from '../../components/EmptyList';
+import Strings from '../../helpers/Strings';
 import {useDispatch, useSelector} from 'react-redux';
-import * as categoryActions from '../store/actions/categories';
+import * as categoryActions from '../../store/actions/categories';
 import {IconButton} from 'react-native-paper';
-import ActivityIndicatorView from '../components/ActivityIndicatorView';
+import ActivityIndicatorView from '../../components/ActivityIndicatorView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert} from 'react-native';
 const CategoriesScreen = ({navigation}) => {
