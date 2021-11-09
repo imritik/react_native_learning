@@ -2,6 +2,7 @@ import {AUTHENTICATE, LOGOUT} from '../actions/auth';
 const initialState = {
   token: null,
   userId: null,
+  hasNotificationFlag: false,
 };
 
 const authReducer = (state = initialState, action) => {

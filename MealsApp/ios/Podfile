@@ -29,7 +29,6 @@ target 'MealsApp' do
    pod 'Permission-SpeechRecognition', :path => "#{permissions_path}/SpeechRecognition"
    pod 'Permission-StoreKit', :path => "#{permissions_path}/StoreKit"
  
-   
   config = use_native_modules!
 
   use_react_native!(

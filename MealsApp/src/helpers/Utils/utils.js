@@ -34,7 +34,7 @@ export const touchIdAuth = async () => {
               resolve(success);
             })
             .catch(error => {
-              reject(error);
+              reject();
             });
         } else {
           reject();

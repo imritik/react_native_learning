@@ -15,6 +15,7 @@ import {TouchableOpacity} from 'react-native';
 import {Alert} from 'react-native';
 import * as utils from '../helpers/Utils/utils';
 import {useAppStyle} from '../styles/AppStyle';
+import {Platform} from 'react-native';
 
 const ImgPicker = props => {
   const [pickedImage, setPickedImage] = useState();
@@ -37,29 +38,37 @@ const ImgPicker = props => {
     });
   };
 
+  const launchDeviceCamera = () => {
+    try {
+      launchCamera(
+        {
+          saveToPhotos: true,
+          mediaType: 'photo',
+        },
+        response => {
+          if (response.didCancel) {
+          }
+          if (response.assets) {
+            let source = response.assets[0].uri;
+            setPickedImage(source);
+            props.onImageTaken(source);
+          }
+        },
+      );
+    } catch (err) {
+      Alert.alert(err.message);
+    }
+  };
+
   const openCamera = async () => {
     setIsDialogVisible(false);
-    const hasCameraPermission = await utils.checkCameraPermission();
-    if (hasCameraPermission) {
-      try {
-        launchCamera(
-          {
-            saveToPhotos: true,
-            mediaType: 'photo',
-          },
-          response => {
-            if (response.didCancel) {
-            }
-            if (response.assets) {
-              let source = response.assets[0].uri;
-              setPickedImage(source);
-              props.onImageTaken(source);
-            }
-          },
-        );
-      } catch (err) {
-        Alert.alert(err.message);
+    if (Platform.OS == 'android') {
+      const hasCameraPermission = await utils.checkCameraPermission();
+      if (hasCameraPermission) {
+        launchDeviceCamera();
       }
+    } else {
+      launchDeviceCamera();
     }
   };
 

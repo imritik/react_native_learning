@@ -135,12 +135,15 @@ const AuthScreen = ({route, navigation}) => {
     utils
       .touchIdAuth()
       .then(res => {
-        Alert.alert(JSON.stringify(res));
-        //fetch stored credentials
+        submitFormData();
       })
       .catch(err => {
         console.log(err);
-        Alert.alert(JSON.stringify(err));
+        if (err.name == 'Touch ID Error') {
+          Alert.alert(Strings.NO_BIOMETRICS_FOUND);
+        } else {
+          Alert.alert(err.message);
+        }
       });
   };
 

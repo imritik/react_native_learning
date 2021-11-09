@@ -34,6 +34,7 @@ const defaultStackNavOptions = {
   headerTitleAlign: 'center',
 };
 
+let initialScreenName = Strings.CATEGORIES_SCREEN_TITLE;
 const MealsStack = createStackNavigator();
 
 const MealsNavigator = () => {
@@ -153,6 +154,7 @@ const BottomTab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
+      initialRouteName={initialScreenName}
       screenOptions={{
         ...defaultStackNavOptions,
         tabBarStyle: {
@@ -260,12 +262,23 @@ function MyDrawer() {
   );
 }
 
-const MainNavigator = () => {
+const MainNavigator = props => {
+  const {hasNotificationFlag} = props;
   let isAutheticated = useSelector(state => !!state.auth.token);
+  if (hasNotificationFlag) {
+    initialScreenName = Strings.FAVORITES;
+  }
+
   const scheme = useColorScheme();
   return (
     <NavigationContainer theme={scheme == 'dark' ? DarkTheme : DefaultTheme}>
-      {isAutheticated ? <MyDrawer /> : <AuthNavigator />}
+      {isAutheticated && hasNotificationFlag ? (
+        <MyDrawer />
+      ) : isAutheticated ? (
+        <MyDrawer />
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 };

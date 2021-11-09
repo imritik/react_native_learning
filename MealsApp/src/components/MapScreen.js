@@ -1,6 +1,5 @@
 import LocationView from 'react-native-location-view';
 import React from 'react';
-import {View} from 'react-native';
 import {SafeAreaView} from 'react-native';
 import {useAppStyle} from '../styles/AppStyle';
 import ENV from '../../env';
@@ -14,8 +13,8 @@ const MapScreen = props => {
           latitude: 37.78825,
           longitude: -122.4324,
         }}
-        onLocationSelect={()=>{}}
-        markerColor="blue"
+        // onLocationSelect={()=>{}}
+        markerColor="dodgerblue"
       />
     </SafeAreaView>
   );

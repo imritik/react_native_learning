@@ -41,5 +41,5 @@ export const useAppStyle = () => {
       color: 'black',
     },
   });
-  return {styles, theme};
+  return {styles, theme,isDark};
 };

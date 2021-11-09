@@ -58,4 +58,5 @@ export default {
   SELECT_IMAGE_FROM: 'Select image from..',
   CAMERA: 'Camera',
   GALLERY: 'Gallery',
+  NO_BIOMETRICS_FOUND: 'No Biometrics Found !',
 };
